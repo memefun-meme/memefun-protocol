@@ -209,6 +209,22 @@ pub mod solana_memes {
         instructions::update_reputation::handler(ctx, creator, reputation_change)
     }
 
+    /// Choose vesting distribution option
+    pub fn choose_vesting_option(
+        ctx: Context<ChooseVestingOption>,
+        option: VestingOption,
+    ) -> Result<()> {
+        instructions::choose_vesting_option::handler(ctx, option)
+    }
+
+    /// Collect trading fee
+    pub fn collect_trading_fee(
+        ctx: Context<CollectTradingFee>,
+        trade_amount: u64,
+    ) -> Result<()> {
+        instructions::collect_trading_fee::handler(ctx, trade_amount)
+    }
+
     /// Emergency pause the program
     pub fn emergency_pause(
         ctx: Context<EmergencyPause>,

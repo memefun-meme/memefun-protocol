@@ -1,6 +1,32 @@
 use anchor_lang::prelude::*;
 
-/// Creator profile with reputation and restrictions
+/// Vesting schedule for creator tokens with distribution options
+#[account]
+pub struct Vesting {
+    pub owner: Pubkey,
+    pub mint: Pubkey,
+    pub amount: u64,
+    pub start_time: i64,
+    pub cliff_time: i64,
+    pub end_time: i64,
+    pub released: u64,
+    pub is_revocable: bool,
+    pub revoked: bool,
+    pub revoke_time: Option<i64>,
+    pub distribution_choice: Option<VestingOption>,
+    pub choice_deadline: i64,
+    pub choice_made: bool,
+}
+
+/// Post-vesting distribution options
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum VestingOption {
+    Withdraw,      // Take all tokens
+    Burn,          // Burn 50%, keep 50%
+    Distribute,    // Distribute 50% to holders, keep 50%
+}
+
+/// Enhanced creator profile with reputation-based allocation
 #[account]
 pub struct CreatorProfile {
     pub is_registered: bool,
@@ -16,6 +42,8 @@ pub struct CreatorProfile {
     pub ban_reason: String,
     pub launch_pass_required: bool,
     pub launch_pass_mint: Option<Pubkey>,
+    pub max_allocation_percent: u8,  // Based on reputation
+    pub total_profit_shared: u64,    // Total profits shared with community
 }
 
 /// Token metadata and configuration
@@ -43,20 +71,53 @@ pub struct TokenMetadata {
     pub min_transaction_size: u64,
 }
 
-/// Vesting schedule for creator tokens
+/// Staking rewards configuration
 #[account]
-pub struct Vesting {
-    pub owner: Pubkey,
+pub struct StakingRewards {
+    pub total_rewards_distributed: u64,
+    pub platform_fees_collected: u64,
+    pub buyback_rewards_pool: u64,
+    pub success_rewards_pool: u64,
+    pub reward_rate: u64,
+    pub last_distribution_time: i64,
+    pub distribution_period: i64,
+}
+
+/// Platform treasury for fee collection
+#[account]
+pub struct PlatformTreasury {
+    pub authority: Pubkey,
+    pub sol_balance: u64,
+    pub token_balances: Vec<TokenBalance>,
+    pub fee_collection_stats: FeeStats,
+    pub last_updated: i64,
+}
+
+/// Token balance in treasury
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct TokenBalance {
     pub mint: Pubkey,
     pub amount: u64,
-    pub start_time: i64,
-    pub cliff_time: i64,
-    pub end_time: i64,
-    pub released: u64,
-    pub is_revocable: bool,
-    pub revoked: bool,
-    pub revoke_time: Option<i64>,
+    pub last_updated: i64,
 }
+
+/// Fee collection statistics
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct FeeStats {
+    pub total_creation_fees: u64,      // 0.03 SOL per token creation
+    pub total_trading_fees: u64,       // 1% of trading volume
+    pub total_buyback_fees: u64,       // 0.05% of buyback amount
+    pub total_listing_fees: u64,       // 0.01 SOL per listing
+    pub fees_distributed_to_stakers: u64,
+    pub fees_retained_for_development: u64,
+    pub fees_for_governance: u64,
+}
+
+/// Fee constants
+pub const TOKEN_CREATION_FEE: u64 = 30_000_000;  // 0.03 SOL
+pub const TRADING_FEE_PERCENTAGE: u8 = 1;        // 1%
+pub const BUYBACK_FEE_PERCENTAGE: u8 = 5;        // 0.05%
+pub const LISTING_FEE: u64 = 10_000_000;         // 0.01 SOL
 
 /// Staking pool for tokens
 #[account]

@@ -16,3 +16,5 @@ pub mod add_liquidity;
 pub mod remove_liquidity;
 pub mod report_activity;
 pub mod update_reputation;
+pub mod choose_vesting_option;
+pub mod collect_trading_fee;

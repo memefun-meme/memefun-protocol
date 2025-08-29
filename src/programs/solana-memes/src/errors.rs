@@ -160,6 +160,20 @@ pub enum CustomError {
     #[msg("Reputation update failed")]
     ReputationUpdateFailed,
 
+    // Vesting choice errors
+    #[msg("Choice deadline has passed")]
+    ChoiceDeadlinePassed,
+    #[msg("Choice already made")]
+    ChoiceAlreadyMade,
+    #[msg("Invalid vesting option")]
+    InvalidVestingOption,
+
+    // Trading fee errors
+    #[msg("Trading fee calculation error")]
+    TradingFeeError,
+    #[msg("Invalid trade amount")]
+    InvalidTradeAmount,
+
     // General errors
     #[msg("Invalid input")]
     InvalidInput,
