@@ -49,7 +49,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/create" element={<TokenCreator />} />
                     <Route path="/explore" element={<TokenExplorer />} />
-                                                <Route path="/staking" element={<Staking />} />
+                    <Route path="/staking" element={<Staking />} />
                     <Route path="/staking-dashboard" element={<StakingDashboard />} />
                     <Route path="/vesting-choice" element={<VestingChoice />} />
                     <Route path="/liquidity-bootstrapping" element={<LiquidityBootstrapping />} />
