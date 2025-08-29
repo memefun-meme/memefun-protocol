@@ -179,6 +179,32 @@ pub enum CustomError {
     WeeklyCreationLimitExceeded,
     #[msg("Allocation exceeds maximum allowed")]
     AllocationExceedsMaximum,
+    
+    // LBM errors
+    #[msg("LBM pool not active")]
+    LBMNotActive,
+    #[msg("LBM not started yet")]
+    LBMNotStarted,
+    #[msg("LBM period has ended")]
+    LBMEnded,
+    #[msg("LBM still active")]
+    LBMStillActive,
+    #[msg("LBM already finalized")]
+    LBMAlreadyFinalized,
+    #[msg("Insufficient liquidity requirement")]
+    InsufficientLiquidity,
+    #[msg("Excessive liquidity requirement")]
+    ExcessiveLiquidity,
+    #[msg("Invalid participation amount")]
+    InvalidParticipationAmount,
+    #[msg("Insufficient participation amount")]
+    InsufficientParticipationAmount,
+    #[msg("Excessive participation amount")]
+    ExcessiveParticipationAmount,
+    #[msg("Excessive participation limit")]
+    ExcessiveParticipationLimit,
+    #[msg("Target liquidity exceeded")]
+    TargetLiquidityExceeded,
 
     // General errors
     #[msg("Invalid input")]

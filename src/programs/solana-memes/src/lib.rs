@@ -231,6 +231,44 @@ pub mod solana_memes {
     ) -> Result<()> {
         instructions::validate_creator_limits::handler(ctx)
     }
+    
+    /// Create liquidity bootstrapping pool
+    pub fn create_lbm_pool(
+        ctx: Context<CreateLBMPool>,
+        target_liquidity: u64,
+        bootstrap_duration: i64,
+        price_discovery_period: i64,
+        max_participation_per_wallet: u64,
+        min_participation: u64,
+        max_participation: u64,
+        anti_bot_enabled: bool,
+    ) -> Result<()> {
+        instructions::create_lbm_pool::handler(
+            ctx,
+            target_liquidity,
+            bootstrap_duration,
+            price_discovery_period,
+            max_participation_per_wallet,
+            min_participation,
+            max_participation,
+            anti_bot_enabled,
+        )
+    }
+    
+    /// Participate in liquidity bootstrapping pool
+    pub fn participate_lbm(
+        ctx: Context<ParticipateLBM>,
+        participation_amount: u64,
+    ) -> Result<()> {
+        instructions::participate_lbm::handler(ctx, participation_amount)
+    }
+    
+    /// Finalize liquidity bootstrapping pool
+    pub fn finalize_lbm(
+        ctx: Context<FinalizeLBM>,
+    ) -> Result<()> {
+        instructions::finalize_lbm::handler(ctx)
+    }
 
     /// Emergency pause the program
     pub fn emergency_pause(

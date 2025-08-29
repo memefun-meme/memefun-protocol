@@ -19,3 +19,6 @@ pub mod update_reputation;
 pub mod choose_vesting_option;
 pub mod collect_trading_fee;
 pub mod validate_creator_limits;
+pub mod create_lbm_pool;
+pub mod participate_lbm;
+pub mod finalize_lbm;

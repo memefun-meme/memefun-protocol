@@ -331,3 +331,66 @@ pub const MIN_TRANSACTION_SIZE: u64 = 1_000; // 0.001 tokens
 pub const LIQUIDITY_LOCK_PERIOD: i64 = 30 * 24 * 60 * 60; // 30 days
 pub const EARLY_WITHDRAWAL_FEE: u8 = 10; // 10%
 pub const REWARD_RATE_PER_DAY: u64 = 1_000_000; // 0.1% per day
+
+/// Liquidity bootstrapping pool for fair token launches
+#[account]
+pub struct LiquidityBootstrappingPool {
+    pub token_mint: Pubkey,
+    pub creator: Pubkey,
+    pub initial_liquidity: u64,
+    pub target_liquidity: u64,
+    pub current_liquidity: u64,
+    pub bootstrap_start_time: i64,
+    pub bootstrap_end_time: i64,
+    pub price_discovery_period: i64,
+    pub liquidity_release_schedule: Vec<LiquidityRelease>,
+    pub is_active: bool,
+    pub total_participants: u32,
+    pub total_volume: u64,
+    pub current_price: u64,
+    pub initial_price: u64,
+    pub final_price: u64,
+    pub price_discovery_complete: bool,
+    pub liquidity_providers: Vec<LiquidityProvider>,
+    pub anti_bot_enabled: bool,
+    pub max_participation_per_wallet: u64,
+    pub min_participation: u64,
+    pub max_participation: u64,
+}
+
+/// Liquidity release schedule
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct LiquidityRelease {
+    pub release_time: i64,
+    pub release_amount: u64,
+    pub release_percentage: u8,
+    pub is_executed: bool,
+}
+
+/// Liquidity provider information
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct LiquidityProvider {
+    pub wallet: Pubkey,
+    pub provided_amount: u64,
+    pub participation_time: i64,
+    pub rewards_claimed: u64,
+    pub is_whitelisted: bool,
+}
+
+/// LBM participation status
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum LBMStatus {
+    NotStarted,
+    Active,
+    PriceDiscovery,
+    Completed,
+    Failed,
+}
+
+/// LBM configuration constants
+pub const DEFAULT_BOOTSTRAP_DURATION: i64 = 86400;  // 24 hours
+pub const DEFAULT_PRICE_DISCOVERY_PERIOD: i64 = 3600;  // 1 hour
+pub const MIN_LIQUIDITY_REQUIREMENT: u64 = 1_000_000_000;  // 1 SOL worth
+pub const MAX_LIQUIDITY_REQUIREMENT: u64 = 100_000_000_000;  // 100 SOL worth
+pub const DEFAULT_MAX_PARTICIPATION: u64 = 10_000_000_000;  // 10 SOL per wallet
+pub const DEFAULT_MIN_PARTICIPATION: u64 = 100_000_000;  // 0.1 SOL per wallet

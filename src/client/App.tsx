@@ -16,6 +16,7 @@ import TokenCreator from './pages/TokenCreator';
 import TokenExplorer from './pages/TokenExplorer';
 import StakingDashboard from './pages/StakingDashboard';
 import VestingChoice from './pages/VestingChoice';
+import LiquidityBootstrapping from './pages/LiquidityBootstrapping';
 import Staking from './pages/Staking';
 import Governance from './pages/Governance';
 import Analytics from './pages/Analytics';
@@ -48,10 +49,11 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/create" element={<TokenCreator />} />
                     <Route path="/explore" element={<TokenExplorer />} />
-                            <Route path="/staking" element={<Staking />} />
-        <Route path="/staking-dashboard" element={<StakingDashboard />} />
-        <Route path="/vesting-choice" element={<VestingChoice />} />
-        <Route path="/governance" element={<Governance />} />
+                                                <Route path="/staking" element={<Staking />} />
+                    <Route path="/staking-dashboard" element={<StakingDashboard />} />
+                    <Route path="/vesting-choice" element={<VestingChoice />} />
+                    <Route path="/liquidity-bootstrapping" element={<LiquidityBootstrapping />} />
+                    <Route path="/governance" element={<Governance />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="*" element={<NotFound />} />
