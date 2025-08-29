@@ -173,6 +173,12 @@ pub enum CustomError {
     TradingFeeError,
     #[msg("Invalid trade amount")]
     InvalidTradeAmount,
+    
+    // Creator limit errors
+    #[msg("Weekly creation limit exceeded")]
+    WeeklyCreationLimitExceeded,
+    #[msg("Allocation exceeds maximum allowed")]
+    AllocationExceedsMaximum,
 
     // General errors
     #[msg("Invalid input")]

@@ -26,25 +26,27 @@ pub enum VestingOption {
     Distribute,    // Distribute 50% to holders, keep 50%
 }
 
-/// Enhanced creator profile with reputation-based allocation
-#[account]
-pub struct CreatorProfile {
-    pub is_registered: bool,
-    pub owner: Pubkey,
-    pub stake_amount: u64,
-    pub last_creation_ts: i64,
-    pub reputation_score: i32,
-    pub total_tokens_created: u32,
-    pub successful_tokens: u32,
-    pub failed_tokens: u32,
-    pub total_volume: u64,
-    pub is_banned: bool,
-    pub ban_reason: String,
-    pub launch_pass_required: bool,
-    pub launch_pass_mint: Option<Pubkey>,
-    pub max_allocation_percent: u8,  // Based on reputation
-    pub total_profit_shared: u64,    // Total profits shared with community
-}
+        /// Enhanced creator profile with reputation-based allocation
+        #[account]
+        pub struct CreatorProfile {
+            pub is_registered: bool,
+            pub owner: Pubkey,
+            pub stake_amount: u64,
+            pub last_creation_ts: i64,
+            pub reputation_score: i32,
+            pub total_tokens_created: u32,
+            pub successful_tokens: u32,
+            pub failed_tokens: u32,
+            pub total_volume: u64,
+            pub is_banned: bool,
+            pub ban_reason: String,
+            pub launch_pass_required: bool,
+            pub launch_pass_mint: Option<Pubkey>,
+            pub max_allocation_percent: u8,  // Based on reputation (max 7%)
+            pub total_profit_shared: u64,    // Total profits shared with community
+            pub weekly_creation_count: u8,   // Track weekly creations (max 2 per week)
+            pub last_week_reset: i64,        // Track when weekly count resets
+        }
 
 /// Token metadata and configuration
 #[account]
@@ -113,11 +115,21 @@ pub struct FeeStats {
     pub fees_for_governance: u64,
 }
 
-/// Fee constants
-pub const TOKEN_CREATION_FEE: u64 = 30_000_000;  // 0.03 SOL
-pub const TRADING_FEE_PERCENTAGE: u8 = 1;        // 1%
-pub const BUYBACK_FEE_PERCENTAGE: u8 = 5;        // 0.05%
-pub const LISTING_FEE: u64 = 10_000_000;         // 0.01 SOL
+        /// Fee constants
+        pub const TOKEN_CREATION_FEE: u64 = 30_000_000;  // 0.03 SOL
+        pub const TRADING_FEE_PERCENTAGE: u8 = 1;        // 1%
+        pub const BUYBACK_FEE_PERCENTAGE: u8 = 5;        // 0.05%
+        pub const LISTING_FEE: u64 = 10_000_000;         // 0.01 SOL
+        
+        /// Creator limits and allocation constants
+        pub const MAX_CREATOR_ALLOCATION_PERCENT: u8 = 7;  // Maximum 7% allocation for creators
+        pub const MAX_WEEKLY_CREATIONS: u8 = 2;            // Maximum 2 tokens per week
+        pub const WEEK_IN_SECONDS: i64 = 604800;           // 7 days in seconds
+        
+        /// Fee distribution percentages (55/35/10 split)
+        pub const STAKER_REWARD_PERCENTAGE: u8 = 55;       // 55% to stakers
+        pub const DEVELOPMENT_PERCENTAGE: u8 = 35;         // 35% to development
+        pub const GOVERNANCE_PERCENTAGE: u8 = 10;          // 10% to governance
 
 /// Staking pool for tokens
 #[account]

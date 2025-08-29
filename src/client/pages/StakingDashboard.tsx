@@ -225,7 +225,7 @@ const StakingDashboard: React.FC = () => {
                 <div className="bg-blue-900/20 p-4 rounded-lg">
                   <h4 className="text-blue-400 font-semibold mb-2">Platform Fees</h4>
                   <p className="text-white font-bold">{formatCurrency(platformStats.platformFees)}</p>
-                  <p className="text-gray-400 text-sm">From token creation & trading</p>
+                  <p className="text-gray-400 text-sm">From token creation & trading (55% to stakers)</p>
                 </div>
                 <div className="bg-green-900/20 p-4 rounded-lg">
                   <h4 className="text-green-400 font-semibold mb-2">Buyback Rewards</h4>

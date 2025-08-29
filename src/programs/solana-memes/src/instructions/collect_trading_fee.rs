@@ -47,10 +47,10 @@ pub fn handler(ctx: Context<CollectTradingFee>, trade_amount: u64) -> Result<()>
     let staking_rewards = &mut ctx.accounts.staking_rewards;
     staking_rewards.platform_fees_collected += trading_fee;
     
-    // Calculate distribution (60% to stakers, 30% to development, 10% to governance)
-    let staker_portion = (trading_fee * 60) / 100;
-    let development_portion = (trading_fee * 30) / 100;
-    let governance_portion = trading_fee - staker_portion - development_portion;
+    // Calculate distribution (55% to stakers, 35% to development, 10% to governance)
+    let staker_portion = (trading_fee * STAKER_REWARD_PERCENTAGE as u64) / 100;
+    let development_portion = (trading_fee * DEVELOPMENT_PERCENTAGE as u64) / 100;
+    let governance_portion = (trading_fee * GOVERNANCE_PERCENTAGE as u64) / 100;
     
     staking_rewards.total_rewards_distributed += staker_portion;
     treasury.fee_collection_stats.fees_distributed_to_stakers += staker_portion;

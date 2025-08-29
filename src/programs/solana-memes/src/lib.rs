@@ -224,6 +224,13 @@ pub mod solana_memes {
     ) -> Result<()> {
         instructions::collect_trading_fee::handler(ctx, trade_amount)
     }
+    
+    /// Validate creator limits
+    pub fn validate_creator_limits(
+        ctx: Context<ValidateCreatorLimits>,
+    ) -> Result<()> {
+        instructions::validate_creator_limits::handler(ctx)
+    }
 
     /// Emergency pause the program
     pub fn emergency_pause(
