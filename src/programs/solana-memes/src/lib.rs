@@ -8,10 +8,12 @@ pub mod instructions;
 pub mod state;
 pub mod utils;
 pub mod buyback;
+pub mod security;
 
 use instructions::*;
 use state::*;
 use buyback::*;
+use security::*;
 
 #[program]
 pub mod solana_memes {
@@ -205,5 +207,37 @@ pub mod solana_memes {
         reputation_change: i32,
     ) -> Result<()> {
         instructions::update_reputation::handler(ctx, creator, reputation_change)
+    }
+
+    /// Emergency pause the program
+    pub fn emergency_pause(
+        ctx: Context<EmergencyPause>,
+        reason: String,
+    ) -> Result<()> {
+        security::emergency_pause(ctx, reason)
+    }
+
+    /// Emergency unpause the program
+    pub fn emergency_unpause(ctx: Context<EmergencyPause>) -> Result<()> {
+        security::emergency_unpause(ctx)
+    }
+
+    /// Update access control
+    pub fn update_access_control(
+        ctx: Context<UpdateAccessControl>,
+        new_admin: Option<Pubkey>,
+        new_emergency_authority: Option<Pubkey>,
+        new_treasury_authority: Option<Pubkey>,
+        add_moderator: Option<Pubkey>,
+        remove_moderator: Option<Pubkey>,
+    ) -> Result<()> {
+        security::update_access_control(
+            ctx,
+            new_admin,
+            new_emergency_authority,
+            new_treasury_authority,
+            add_moderator,
+            remove_moderator,
+        )
     }
 }
