@@ -268,7 +268,7 @@ describe('Liquidity Bootstrapping Mechanism (LBM)', () => {
   describe('LBM Security Features', () => {
     it('should enforce participation limits', async () => {
       const poolAccount = await program.account.liquidityBootstrappingPool.fetch(lbmPool);
-      
+
       expect(poolAccount.minParticipation.eq(minParticipation)).to.be.true;
       expect(poolAccount.maxParticipationPerWallet.eq(maxParticipationPerWallet)).to.be.true;
     });

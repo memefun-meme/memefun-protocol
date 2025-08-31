@@ -99,12 +99,12 @@ const StakingDashboard: React.FC = () => {
     try {
       // Mock API call - replace with actual implementation
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       toast.success('Rewards claimed successfully!');
-      
+
       // Update position
-      setStakingPositions(prev => prev.map(pos => 
-        pos.id === positionId 
+      setStakingPositions(prev => prev.map(pos =>
+        pos.id === positionId
           ? { ...pos, rewardsEarned: 0, canClaim: false }
           : pos
       ));
@@ -120,9 +120,9 @@ const StakingDashboard: React.FC = () => {
     try {
       // Mock API call - replace with actual implementation
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       toast.success('Tokens unstaked successfully!');
-      
+
       // Remove position
       setStakingPositions(prev => prev.filter(pos => pos.id !== positionId));
     } catch (error) {
@@ -225,7 +225,7 @@ const StakingDashboard: React.FC = () => {
                 <div className="bg-blue-900/20 p-4 rounded-lg">
                   <h4 className="text-blue-400 font-semibold mb-2">Platform Fees</h4>
                   <p className="text-white font-bold">{formatCurrency(platformStats.platformFees)}</p>
-                  <p className="text-gray-400 text-sm">From token creation & trading (55% to stakers)</p>
+                  <p className="text-gray-400 text-sm">From token creation & trading (55% to stakers, 1.2% trading fee)</p>
                 </div>
                 <div className="bg-green-900/20 p-4 rounded-lg">
                   <h4 className="text-green-400 font-semibold mb-2">Buyback Rewards</h4>
@@ -273,7 +273,7 @@ const StakingDashboard: React.FC = () => {
             <div className="text-center">
               <p className="text-gray-400 text-sm">Average APY</p>
               <p className="text-white font-bold text-xl">
-                {stakingPositions.length > 0 
+                {stakingPositions.length > 0
                   ? (stakingPositions.reduce((sum, pos) => sum + pos.apy, 0) / stakingPositions.length).toFixed(1)
                   : '0'
                 }%
@@ -285,7 +285,7 @@ const StakingDashboard: React.FC = () => {
         {/* Staking Positions */}
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold text-white">Your Staking Positions</h2>
-          
+
           {stakingPositions.length === 0 ? (
             <div className="card text-center py-12">
               <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -398,15 +398,15 @@ const StakingDashboard: React.FC = () => {
                   <div className="flex justify-between text-sm text-gray-400 mb-2">
                     <span>Staking Progress</span>
                     <span>
-                      {Math.floor((Date.now() - new Date(position.startDate).getTime()) / 
+                      {Math.floor((Date.now() - new Date(position.startDate).getTime()) /
                         (new Date(position.endDate).getTime() - new Date(position.startDate).getTime()) * 100)}%
                     </span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
                       style={{
-                        width: `${Math.min(100, Math.floor((Date.now() - new Date(position.startDate).getTime()) / 
+                        width: `${Math.min(100, Math.floor((Date.now() - new Date(position.startDate).getTime()) /
                           (new Date(position.endDate).getTime() - new Date(position.startDate).getTime()) * 100))}%`
                       }}
                     ></div>

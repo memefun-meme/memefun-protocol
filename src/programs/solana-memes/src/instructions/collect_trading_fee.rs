@@ -16,6 +16,9 @@ pub struct CollectTradingFee<'info> {
     #[account(mut)]
     pub staking_rewards: Account<'info, StakingRewards>,
     
+    /// Platform configuration for dynamic fee
+    pub platform_config: Account<'info, PlatformConfig>,
+    
     /// The token being traded
     pub token_mint: Account<'info, Mint>,
     
@@ -24,7 +27,10 @@ pub struct CollectTradingFee<'info> {
 }
 
 pub fn handler(ctx: Context<CollectTradingFee>, trade_amount: u64) -> Result<()> {
-    let trading_fee = (trade_amount * TRADING_FEE_PERCENTAGE as u64) / 100;
+    let platform_config = &ctx.accounts.platform_config;
+    
+    // Use dynamic trading fee from platform config
+    let trading_fee = (trade_amount * platform_config.trading_fee_percentage as u64) / 1000; // Basis points
     
     // Transfer trading fee to treasury
     let cpi_accounts = Transfer {

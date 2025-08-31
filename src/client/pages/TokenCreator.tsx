@@ -412,7 +412,7 @@ const TokenCreator: React.FC = () => {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-300">Trading Fee:</span>
-                        <span className="text-green-400 font-semibold">1% (55% to stakers)</span>
+                        <span className="text-green-400 font-semibold">1.2% (55% to stakers, adjustable via governance)</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-300">Buyback Fee:</span>

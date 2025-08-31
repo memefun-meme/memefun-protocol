@@ -17,6 +17,7 @@ import TokenExplorer from './pages/TokenExplorer';
 import StakingDashboard from './pages/StakingDashboard';
 import VestingChoice from './pages/VestingChoice';
 import LiquidityBootstrapping from './pages/LiquidityBootstrapping';
+import FeeManagement from './pages/FeeManagement';
 import Staking from './pages/Staking';
 import Governance from './pages/Governance';
 import Analytics from './pages/Analytics';
@@ -50,9 +51,10 @@ function App() {
                     <Route path="/create" element={<TokenCreator />} />
                     <Route path="/explore" element={<TokenExplorer />} />
                     <Route path="/staking" element={<Staking />} />
-                    <Route path="/staking-dashboard" element={<StakingDashboard />} />
-                    <Route path="/vesting-choice" element={<VestingChoice />} />
-                    <Route path="/liquidity-bootstrapping" element={<LiquidityBootstrapping />} />
+                                <Route path="/staking-dashboard" element={<StakingDashboard />} />
+            <Route path="/vesting-choice" element={<VestingChoice />} />
+            <Route path="/liquidity-bootstrapping" element={<LiquidityBootstrapping />} />
+            <Route path="/fee-management" element={<FeeManagement />} />
                     <Route path="/governance" element={<Governance />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/profile" element={<Profile />} />

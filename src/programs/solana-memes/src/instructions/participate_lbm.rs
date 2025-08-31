@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Mint};
 use crate::state::*;
+use crate::security_utils::SecurityUtils;
 
 #[derive(Accounts)]
 pub struct ParticipateLBM<'info> {
@@ -22,6 +23,29 @@ pub struct ParticipateLBM<'info> {
     #[account(mut)]
     pub staking_rewards: Account<'info, StakingRewards>,
     
+    /// Circuit breaker for price and volume protection
+    #[account(
+        seeds = [b"circuit_breaker"],
+        bump,
+        constraint = !circuit_breaker.is_triggered @ CustomError::CircuitBreakerTriggered
+    )]
+    pub circuit_breaker: Account<'info, CircuitBreaker>,
+    
+    /// Trade protection for flash loan detection
+    #[account(
+        seeds = [b"trade_protection"],
+        bump
+    )]
+    pub trade_protection: Account<'info, TradeProtection>,
+    
+    /// Emergency controls
+    #[account(
+        seeds = [b"emergency_controls"],
+        bump,
+        constraint = !emergency_controls.emergency_pause @ CustomError::EmergencyPauseActive
+    )]
+    pub emergency_controls: Account<'info, EmergencyControls>,
+    
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
 }
@@ -29,6 +53,29 @@ pub struct ParticipateLBM<'info> {
 pub fn handler(ctx: Context<ParticipateLBM>, participation_amount: u64) -> Result<()> {
     let lbm_pool = &mut ctx.accounts.lbm_pool;
     let current_time = Clock::get()?.unix_timestamp;
+    
+    // SECURITY CHECKS
+    // Check emergency pause
+    SecurityUtils::check_emergency_pause(&ctx.accounts.emergency_controls)?;
+    
+    // Validate trade for flash loan protection
+    SecurityUtils::validate_trade(
+        ctx.accounts.participant.key(),
+        participation_amount,
+        current_time,
+        &ctx.accounts.trade_protection,
+    )?;
+    
+    // Check circuit breaker
+    let current_price = lbm_pool.current_price;
+    let previous_price = lbm_pool.initial_price;
+    SecurityUtils::check_circuit_breaker(
+        current_price,
+        previous_price,
+        participation_amount,
+        &ctx.accounts.circuit_breaker,
+        current_time,
+    )?;
     
     // Validate LBM pool is active
     require!(lbm_pool.is_active, SolanaMemesError::LBMNotActive);
@@ -41,14 +88,20 @@ pub fn handler(ctx: Context<ParticipateLBM>, participation_amount: u64) -> Resul
         SolanaMemesError::LBMEnded
     );
     
-    // Validate participation amount
+    // Validate participation amount (with security limits)
     require!(
         participation_amount >= lbm_pool.min_participation,
         SolanaMemesError::InsufficientParticipationAmount
     );
+    
+    // Apply security limits instead of unlimited participation
+    let max_participation = std::cmp::min(
+        lbm_pool.max_participation_per_wallet,
+        ctx.accounts.trade_protection.max_trade_amount
+    );
     require!(
-        participation_amount <= lbm_pool.max_participation_per_wallet,
-        SolanaMemesError::ExcessiveParticipationAmount
+        participation_amount <= max_participation,
+        CustomError::TradeTooLarge
     );
     
     // Check if target liquidity would be exceeded
@@ -97,6 +150,14 @@ pub fn handler(ctx: Context<ParticipateLBM>, participation_amount: u64) -> Resul
     // Update pool statistics
     lbm_pool.current_liquidity += participation_amount;
     lbm_pool.total_volume += participation_amount;
+    
+    // Update trade protection records
+    SecurityUtils::update_trade_records(
+        ctx.accounts.participant.key(),
+        participation_amount,
+        current_time,
+        &mut ctx.accounts.trade_protection,
+    )?;
     
     // Calculate new price based on current liquidity
     let new_price = (lbm_pool.current_liquidity * 1_000_000) / lbm_pool.target_liquidity;
