@@ -20,3 +20,6 @@ pub mod security_management;
 pub mod buyback_management;
 pub mod fair_voting_management;
 pub mod phase_1_3_management;
+pub mod leaderboard_management;
+pub mod treasury_yield_farming;
+pub mod rich_media_social;

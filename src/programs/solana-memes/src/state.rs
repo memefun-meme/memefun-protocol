@@ -1183,3 +1183,537 @@ pub enum DashboardView {
     Analytics,
     Community,
 }
+
+/// Comprehensive leaderboard system
+#[account]
+pub struct LeaderboardSystem {
+    pub authority: Pubkey,
+    
+    // Creator rankings
+    pub top_creators_by_volume: Vec<CreatorRanking>,
+    pub top_creators_by_holders: Vec<CreatorRanking>,
+    pub top_creators_by_success_rate: Vec<CreatorRanking>,
+    pub top_creators_by_revenue: Vec<CreatorRanking>,
+    
+    // Trader rankings
+    pub top_traders_by_roi: Vec<TraderRanking>,
+    pub top_traders_by_volume: Vec<TraderRanking>,
+    pub top_traders_by_profit: Vec<TraderRanking>,
+    pub top_traders_by_accuracy: Vec<TraderRanking>,
+    
+    // Token rankings
+    pub top_tokens_by_market_cap: Vec<TokenRanking>,
+    pub top_tokens_by_volume: Vec<TokenRanking>,
+    pub top_tokens_by_growth: Vec<TokenRanking>,
+    pub top_tokens_by_holders: Vec<TokenRanking>,
+    
+    // Weekly competitions
+    pub weekly_hall_of_fame: Vec<WeeklyWinner>,
+    pub current_week_competition: WeeklyCompetition,
+    pub historical_winners: Vec<HistoricalWinner>,
+    
+    // Performance tracking
+    pub last_update_time: i64,
+    pub update_frequency: i64, // How often rankings update
+    pub minimum_qualification: u64, // Minimum requirements for rankings
+    
+    pub created_at: i64,
+    pub updated_at: i64,
+}
+
+/// Creator ranking data
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct CreatorRanking {
+    pub creator: Pubkey,
+    pub rank: u32,
+    pub total_volume: u64,
+    pub total_holders: u32,
+    pub success_rate: f64,
+    pub total_revenue: u64,
+    pub tokens_created: u32,
+    pub average_token_performance: f64,
+    pub reputation_score: i32,
+    pub last_activity: i64,
+}
+
+/// Trader ranking data
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct TraderRanking {
+    pub trader: Pubkey,
+    pub rank: u32,
+    pub total_roi: f64,
+    pub total_volume: u64,
+    pub total_profit: u64,
+    pub trading_accuracy: f64,
+    pub total_trades: u32,
+    pub winning_trades: u32,
+    pub average_trade_size: u64,
+    pub best_trade_roi: f64,
+    pub last_activity: i64,
+}
+
+/// Token ranking data
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct TokenRanking {
+    pub token_mint: Pubkey,
+    pub rank: u32,
+    pub market_cap: u64,
+    pub volume_24h: u64,
+    pub growth_percentage: f64,
+    pub holder_count: u32,
+    pub price_change_24h: f64,
+    pub liquidity: u64,
+    pub creator: Pubkey,
+    pub created_at: i64,
+}
+
+/// Weekly competition structure
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct WeeklyCompetition {
+    pub week_number: u32,
+    pub start_time: i64,
+    pub end_time: i64,
+    pub total_participants: u32,
+    pub total_volume: u64,
+    pub categories: Vec<CompetitionCategory>,
+    pub rewards_pool: u64,
+    pub is_active: bool,
+}
+
+/// Competition categories
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub enum CompetitionCategory {
+    BestCreator,
+    BestTrader,
+    BestToken,
+    MostInnovative,
+    CommunityChoice,
+}
+
+/// Weekly winner
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct WeeklyWinner {
+    pub week_number: u32,
+    pub category: CompetitionCategory,
+    pub winner: Pubkey,
+    pub score: u64,
+    pub reward_amount: u64,
+    pub timestamp: i64,
+}
+
+/// Historical winner
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct HistoricalWinner {
+    pub week_number: u32,
+    pub category: CompetitionCategory,
+    pub winner: Pubkey,
+    pub score: u64,
+    pub reward_amount: u64,
+    pub timestamp: i64,
+}
+
+/// Treasury yield farming system
+#[account]
+pub struct TreasuryYieldFarming {
+    pub authority: Pubkey,
+    
+    // DeFi protocol integrations
+    pub supported_protocols: Vec<DeFiProtocol>,
+    pub active_positions: Vec<YieldPosition>,
+    pub total_value_locked: u64,
+    pub total_yield_earned: u64,
+    
+    // Strategy management
+    pub yield_strategies: Vec<YieldStrategy>,
+    pub risk_management: RiskManagement,
+    pub performance_metrics: YieldPerformance,
+    
+    // Distribution
+    pub yield_distribution: YieldDistribution,
+    pub staker_rewards: u64,
+    pub treasury_retention: u64,
+    pub emergency_reserve: u64,
+    
+    pub created_at: i64,
+    pub updated_at: i64,
+}
+
+/// DeFi protocol integration
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct DeFiProtocol {
+    pub protocol_name: String,
+    pub protocol_address: Pubkey,
+    pub supported_tokens: Vec<Pubkey>,
+    pub apy_range: (f64, f64), // Min and max APY
+    pub risk_level: RiskLevel,
+    pub is_active: bool,
+    pub total_deposited: u64,
+    pub total_earned: u64,
+}
+
+/// Yield farming position
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct YieldPosition {
+    pub position_id: u64,
+    pub protocol: Pubkey,
+    pub token_mint: Pubkey,
+    pub amount_deposited: u64,
+    pub current_value: u64,
+    pub yield_earned: u64,
+    pub apy: f64,
+    pub start_time: i64,
+    pub end_time: Option<i64>,
+    pub is_active: bool,
+    pub risk_score: u8,
+}
+
+/// Yield farming strategy
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct YieldStrategy {
+    pub strategy_id: u64,
+    pub name: String,
+    pub description: String,
+    pub target_apy: f64,
+    pub max_risk_level: RiskLevel,
+    pub allocation_percentage: u8,
+    pub rebalance_frequency: i64,
+    pub is_active: bool,
+    pub performance_history: Vec<StrategyPerformance>,
+}
+
+/// Risk management for yield farming
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct RiskManagement {
+    pub max_total_risk: u8, // 0-100
+    pub max_protocol_risk: u8, // Max risk per protocol
+    pub max_token_allocation: u8, // Max % in single token
+    pub emergency_withdrawal_threshold: u64,
+    pub circuit_breaker_enabled: bool,
+    pub insurance_fund: u64,
+}
+
+/// Yield performance metrics
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct YieldPerformance {
+    pub total_apy: f64,
+    pub daily_yield: u64,
+    pub weekly_yield: u64,
+    pub monthly_yield: u64,
+    pub annual_yield: u64,
+    pub volatility_score: f64,
+    pub sharpe_ratio: f64,
+    pub max_drawdown: f64,
+}
+
+/// Yield distribution structure
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct YieldDistribution {
+    pub staker_percentage: u8, // 70% to stakers
+    pub treasury_percentage: u8, // 20% to treasury
+    pub emergency_percentage: u8, // 10% to emergency fund
+    pub last_distribution_time: i64,
+    pub distribution_frequency: i64, // Daily, weekly, monthly
+}
+
+/// Risk levels for DeFi protocols
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum RiskLevel {
+    Low,      // 1-3
+    Medium,   // 4-6
+    High,     // 7-8
+    VeryHigh, // 9-10
+}
+
+/// Strategy performance tracking
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct StrategyPerformance {
+    pub timestamp: i64,
+    pub apy: f64,
+    pub value: u64,
+    pub yield_earned: u64,
+    pub risk_score: u8,
+}
+
+/// Rich media upload system for token pages
+#[account]
+pub struct RichMediaSystem {
+    pub authority: Pubkey,
+    
+    // Media storage
+    pub media_files: Vec<MediaFile>,
+    pub media_categories: Vec<MediaCategory>,
+    pub storage_usage: u64,
+    pub storage_limit: u64,
+    
+    // Token page customization
+    pub token_pages: Vec<TokenPage>,
+    pub page_templates: Vec<PageTemplate>,
+    pub customization_options: CustomizationOptions,
+    
+    // Social media integration
+    pub social_integrations: Vec<SocialIntegration>,
+    pub auto_posting: AutoPostingConfig,
+    pub social_metrics: SocialMetrics,
+    
+    pub created_at: i64,
+    pub updated_at: i64,
+}
+
+/// Media file structure
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct MediaFile {
+    pub file_id: u64,
+    pub token_mint: Pubkey,
+    pub file_type: MediaType,
+    pub file_uri: String,
+    pub file_size: u64,
+    pub upload_time: i64,
+    pub is_public: bool,
+    pub metadata: MediaMetadata,
+}
+
+/// Media types
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum MediaType {
+    Image,
+    Video,
+    Gif,
+    Audio,
+    Document,
+    Other,
+}
+
+/// Media metadata
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct MediaMetadata {
+    pub title: String,
+    pub description: String,
+    pub tags: Vec<String>,
+    pub creator: Pubkey,
+    pub license: String,
+    pub dimensions: Option<(u32, u32)>, // For images/videos
+    pub duration: Option<u64>, // For videos/audio
+}
+
+/// Media categories
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct MediaCategory {
+    pub category_id: u64,
+    pub name: String,
+    pub description: String,
+    pub parent_category: Option<u64>,
+    pub media_count: u32,
+}
+
+/// Token page customization
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct TokenPage {
+    pub token_mint: Pubkey,
+    pub creator: Pubkey,
+    pub page_config: PageConfig,
+    pub media_gallery: Vec<u64>, // Media file IDs
+    pub social_links: Vec<SocialLink>,
+    pub custom_sections: Vec<CustomSection>,
+    pub analytics: PageAnalytics,
+    pub last_updated: i64,
+}
+
+/// Page configuration
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct PageConfig {
+    pub theme: PageTheme,
+    pub layout: PageLayout,
+    pub color_scheme: ColorScheme,
+    pub custom_css: Option<String>,
+    pub seo_settings: SEOSettings,
+}
+
+/// Page themes
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum PageTheme {
+    Default,
+    Dark,
+    Light,
+    Custom,
+}
+
+/// Page layouts
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum PageLayout {
+    Standard,
+    Minimal,
+    Gallery,
+    Social,
+    Custom,
+}
+
+/// Color scheme
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct ColorScheme {
+    pub primary_color: String,
+    pub secondary_color: String,
+    pub background_color: String,
+    pub text_color: String,
+    pub accent_color: String,
+}
+
+/// SEO settings
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct SEOSettings {
+    pub title: String,
+    pub description: String,
+    pub keywords: Vec<String>,
+    pub og_image: Option<String>,
+    pub twitter_card: Option<String>,
+}
+
+/// Social links
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct SocialLink {
+    pub platform: SocialPlatform,
+    pub url: String,
+    pub is_verified: bool,
+    pub follower_count: u32,
+}
+
+/// Social platforms
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum SocialPlatform {
+    Twitter,
+    Discord,
+    Telegram,
+    Reddit,
+    Instagram,
+    TikTok,
+    YouTube,
+    Website,
+    Other,
+}
+
+/// Custom sections for token pages
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct CustomSection {
+    pub section_id: u64,
+    pub title: String,
+    pub content: String,
+    pub section_type: SectionType,
+    pub is_visible: bool,
+    pub order: u32,
+}
+
+/// Section types
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum SectionType {
+    About,
+    Roadmap,
+    Team,
+    Tokenomics,
+    FAQ,
+    News,
+    Custom,
+}
+
+/// Page analytics
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct PageAnalytics {
+    pub total_views: u64,
+    pub unique_visitors: u64,
+    pub average_time_on_page: f64,
+    pub bounce_rate: f64,
+    pub social_shares: u64,
+    pub media_downloads: u64,
+}
+
+/// Page templates
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct PageTemplate {
+    pub template_id: u64,
+    pub name: String,
+    pub description: String,
+    pub preview_image: String,
+    pub config: PageConfig,
+    pub is_premium: bool,
+    pub usage_count: u32,
+}
+
+/// Customization options
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct CustomizationOptions {
+    pub allow_custom_css: bool,
+    pub allow_custom_js: bool,
+    pub allow_external_embeds: bool,
+    pub allow_analytics: bool,
+    pub allow_social_integration: bool,
+}
+
+/// Social media integration
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct SocialIntegration {
+    pub platform: SocialPlatform,
+    pub api_key: String,
+    pub api_secret: String,
+    pub access_token: String,
+    pub is_connected: bool,
+    pub last_sync: i64,
+    pub sync_frequency: i64,
+}
+
+/// Auto-posting configuration
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct AutoPostingConfig {
+    pub enabled: bool,
+    pub platforms: Vec<SocialPlatform>,
+    pub posting_schedule: PostingSchedule,
+    pub content_templates: Vec<ContentTemplate>,
+    pub auto_hashtags: bool,
+    pub mention_creator: bool,
+}
+
+/// Posting schedule
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct PostingSchedule {
+    pub frequency: PostingFrequency,
+    pub preferred_times: Vec<u8>, // Hours of day (0-23)
+    pub timezone: String,
+    pub auto_schedule: bool,
+}
+
+/// Posting frequency
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum PostingFrequency {
+    Daily,
+    Weekly,
+    Monthly,
+    Custom,
+}
+
+/// Content templates
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct ContentTemplate {
+    pub template_id: u64,
+    pub name: String,
+    pub content: String,
+    pub variables: Vec<String>, // e.g., {token_name}, {price}, {volume}
+    pub platform: SocialPlatform,
+}
+
+/// Social metrics
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct SocialMetrics {
+    pub total_followers: u64,
+    pub total_engagement: u64,
+    pub average_engagement_rate: f64,
+    pub total_posts: u64,
+    pub reach_impressions: u64,
+    pub platform_breakdown: Vec<PlatformMetrics>,
+}
+
+/// Platform-specific metrics
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct PlatformMetrics {
+    pub platform: SocialPlatform,
+    pub followers: u64,
+    pub engagement: u64,
+    pub posts: u64,
+    pub reach: u64,
+}

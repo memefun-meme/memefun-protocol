@@ -644,4 +644,247 @@ pub mod solana_memes {
     pub fn initialize_advanced_staking(ctx: Context<InitializeAdvancedStaking>) -> Result<()> {
         instructions::phase_1_3_management::initialize_advanced_staking(ctx)
     }
+    
+    // Leaderboard Management Instructions
+    pub fn initialize_leaderboard(
+        ctx: Context<InitializeLeaderboard>,
+        update_frequency: i64,
+        minimum_qualification: u64,
+    ) -> Result<()> {
+        instructions::leaderboard_management::initialize_leaderboard(ctx, update_frequency, minimum_qualification)
+    }
+    
+    pub fn update_creator_rankings(ctx: Context<UpdateCreatorRankings>) -> Result<()> {
+        instructions::leaderboard_management::update_creator_rankings(ctx)
+    }
+    
+    pub fn update_trader_rankings(ctx: Context<UpdateTraderRankings>) -> Result<()> {
+        instructions::leaderboard_management::update_trader_rankings(ctx)
+    }
+    
+    pub fn update_token_rankings(ctx: Context<UpdateTokenRankings>) -> Result<()> {
+        instructions::leaderboard_management::update_token_rankings(ctx)
+    }
+    
+    pub fn start_weekly_competition(
+        ctx: Context<StartWeeklyCompetition>,
+        week_number: u32,
+        rewards_pool: u64,
+    ) -> Result<()> {
+        instructions::leaderboard_management::start_weekly_competition(ctx, week_number, rewards_pool)
+    }
+    
+    pub fn end_weekly_competition(ctx: Context<EndWeeklyCompetition>) -> Result<()> {
+        instructions::leaderboard_management::end_weekly_competition_handler(ctx)
+    }
+    
+    // Treasury Yield Farming Instructions
+    pub fn initialize_treasury_yield_farming(ctx: Context<InitializeTreasuryYieldFarming>) -> Result<()> {
+        instructions::treasury_yield_farming::initialize_treasury_yield_farming(ctx)
+    }
+    
+    pub fn add_defi_protocol(
+        ctx: Context<AddDeFiProtocol>,
+        protocol_name: String,
+        protocol_address: Pubkey,
+        supported_tokens: Vec<Pubkey>,
+        min_apy: f64,
+        max_apy: f64,
+        risk_level: RiskLevel,
+    ) -> Result<()> {
+        instructions::treasury_yield_farming::add_defi_protocol(
+            ctx,
+            protocol_name,
+            protocol_address,
+            supported_tokens,
+            min_apy,
+            max_apy,
+            risk_level,
+        )
+    }
+    
+    pub fn create_yield_position(
+        ctx: Context<CreateYieldPosition>,
+        protocol: Pubkey,
+        token_mint: Pubkey,
+        amount: u64,
+        strategy_id: u64,
+    ) -> Result<()> {
+        instructions::treasury_yield_farming::create_yield_position(ctx, protocol, token_mint, amount, strategy_id)
+    }
+    
+    pub fn harvest_yield(ctx: Context<HarvestYield>) -> Result<()> {
+        instructions::treasury_yield_farming::harvest_yield(ctx)
+    }
+    
+    pub fn close_yield_position(
+        ctx: Context<CloseYieldPosition>,
+        position_id: u64,
+    ) -> Result<()> {
+        instructions::treasury_yield_farming::close_yield_position(ctx, position_id)
+    }
+    
+    pub fn emergency_withdrawal(ctx: Context<EmergencyWithdrawal>) -> Result<()> {
+        instructions::treasury_yield_farming::emergency_withdrawal(ctx)
+    }
+    
+    // Rich Media & Social Integration Instructions
+    pub fn initialize_rich_media_system(ctx: Context<InitializeRichMediaSystem>) -> Result<()> {
+        instructions::rich_media_social::initialize_rich_media_system(ctx)
+    }
+    
+    pub fn upload_media_file(
+        ctx: Context<UploadMediaFile>,
+        file_type: MediaType,
+        file_uri: String,
+        file_size: u64,
+        title: String,
+        description: String,
+        tags: Vec<String>,
+        license: String,
+        is_public: bool,
+    ) -> Result<()> {
+        instructions::rich_media_social::upload_media_file(
+            ctx,
+            file_type,
+            file_uri,
+            file_size,
+            title,
+            description,
+            tags,
+            license,
+            is_public,
+        )
+    }
+    
+    pub fn create_token_page(
+        ctx: Context<CreateTokenPage>,
+        theme: PageTheme,
+        layout: PageLayout,
+        primary_color: String,
+        secondary_color: String,
+        background_color: String,
+        text_color: String,
+        accent_color: String,
+        seo_title: String,
+        seo_description: String,
+        seo_keywords: Vec<String>,
+    ) -> Result<()> {
+        instructions::rich_media_social::create_token_page(
+            ctx,
+            theme,
+            layout,
+            primary_color,
+            secondary_color,
+            background_color,
+            text_color,
+            accent_color,
+            seo_title,
+            seo_description,
+            seo_keywords,
+        )
+    }
+    
+    pub fn add_social_link(
+        ctx: Context<AddSocialLink>,
+        platform: SocialPlatform,
+        url: String,
+        follower_count: u32,
+    ) -> Result<()> {
+        instructions::rich_media_social::add_social_link(ctx, platform, url, follower_count)
+    }
+    
+    pub fn add_custom_section(
+        ctx: Context<AddCustomSection>,
+        title: String,
+        content: String,
+        section_type: SectionType,
+        order: u32,
+    ) -> Result<()> {
+        instructions::rich_media_social::add_custom_section(ctx, title, content, section_type, order)
+    }
+    
+    pub fn connect_social_account(
+        ctx: Context<ConnectSocialAccount>,
+        platform: SocialPlatform,
+        api_key: String,
+        api_secret: String,
+        access_token: String,
+        sync_frequency: i64,
+    ) -> Result<()> {
+        instructions::rich_media_social::connect_social_account(
+            ctx,
+            platform,
+            api_key,
+            api_secret,
+            access_token,
+            sync_frequency,
+        )
+    }
+    
+    pub fn enable_auto_posting(
+        ctx: Context<EnableAutoPosting>,
+        platforms: Vec<SocialPlatform>,
+        frequency: PostingFrequency,
+        preferred_times: Vec<u8>,
+        timezone: String,
+        auto_hashtags: bool,
+        mention_creator: bool,
+    ) -> Result<()> {
+        instructions::rich_media_social::enable_auto_posting(
+            ctx,
+            platforms,
+            frequency,
+            preferred_times,
+            timezone,
+            auto_hashtags,
+            mention_creator,
+        )
+    }
+    
+    pub fn create_content_template(
+        ctx: Context<CreateContentTemplate>,
+        name: String,
+        content: String,
+        variables: Vec<String>,
+        platform: SocialPlatform,
+    ) -> Result<()> {
+        instructions::rich_media_social::create_content_template(ctx, name, content, variables, platform)
+    }
+    
+    pub fn update_page_analytics(
+        ctx: Context<UpdatePageAnalytics>,
+        total_views: u64,
+        unique_visitors: u64,
+        average_time_on_page: f64,
+        bounce_rate: f64,
+        social_shares: u64,
+        media_downloads: u64,
+    ) -> Result<()> {
+        instructions::rich_media_social::update_page_analytics(
+            ctx,
+            total_views,
+            unique_visitors,
+            average_time_on_page,
+            bounce_rate,
+            social_shares,
+            media_downloads,
+        )
+    }
+    
+    pub fn update_social_metrics(
+        ctx: Context<UpdateSocialMetrics>,
+        total_followers: u64,
+        total_engagement: u64,
+        total_posts: u64,
+        reach_impressions: u64,
+    ) -> Result<()> {
+        instructions::rich_media_social::update_social_metrics(
+            ctx,
+            total_followers,
+            total_engagement,
+            total_posts,
+            reach_impressions,
+        )
+    }
 }

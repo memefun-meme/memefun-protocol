@@ -18,6 +18,9 @@ import StakingDashboard from './pages/StakingDashboard';
 import VestingChoice from './pages/VestingChoice';
 import LiquidityBootstrapping from './pages/LiquidityBootstrapping';
 import FeeManagement from './pages/FeeManagement';
+import LeaderboardDashboard from './pages/LeaderboardDashboard';
+import TreasuryYieldDashboard from './pages/TreasuryYieldDashboard';
+import TokenPageCustomization from './pages/TokenPageCustomization';
 import Staking from './pages/Staking';
 import Governance from './pages/Governance';
 import Analytics from './pages/Analytics';
@@ -55,6 +58,9 @@ function App() {
             <Route path="/vesting-choice" element={<VestingChoice />} />
             <Route path="/liquidity-bootstrapping" element={<LiquidityBootstrapping />} />
             <Route path="/fee-management" element={<FeeManagement />} />
+            <Route path="/leaderboard" element={<LeaderboardDashboard />} />
+            <Route path="/treasury-yield" element={<TreasuryYieldDashboard />} />
+            <Route path="/token-customization" element={<TokenPageCustomization />} />
                     <Route path="/governance" element={<Governance />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/profile" element={<Profile />} />
